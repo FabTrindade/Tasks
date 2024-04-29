@@ -14,15 +14,12 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
      * Faz login usando API
      */
     fun doLogin(email: String, password: String) {
-        personRepository.login(email, password, object: APIListener<PersonModel>{
+        personRepository.login(email, password, object : APIListener<PersonModel> {
             override fun onSuccess(response: PersonModel) {
-                TODO("Not yet implemented")
             }
 
             override fun onFailure(message: String) {
-                TODO("Not yet implemented")
             }
-        }
         })
     }
 
@@ -31,5 +28,4 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
      */
     fun verifyLoggedUser() {
     }
-
 }
