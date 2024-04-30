@@ -41,14 +41,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     private fun observe() {
-        viewModel.onSuccess.observe(this) {
-            startActivity(Intent(applicationContext, MainActivity::class.java))
+        viewModel.onLogin.observe(this) {
+            if (it.getStatus()) {
+                startActivity(Intent(applicationContext, MainActivity::class.java))
+                finish()
+            } else {
+                Toast.makeText(applicationContext, it.getMessage(), Toast.LENGTH_SHORT).show()
+            }
+
         }
-
-        viewModel.onFailure.observe(this, Observer {
-            Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-        })
-
     }
 
     private fun handleLogin() {
