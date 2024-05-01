@@ -5,6 +5,7 @@
 _Retrofit  
 _LivaData  
 _SharedPreferences  
+_Room (DB)
 
 
 
