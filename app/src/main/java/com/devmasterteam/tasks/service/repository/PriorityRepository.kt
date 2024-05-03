@@ -41,6 +41,9 @@ class PriorityRepository(val context: Context) {
 
     }
 
+    fun list(): List<PriorityModel> { //Without overload means get from DB
+        return database.list()
+    }
     fun save(data: List<PriorityModel>) {
         database.clear()
         database.save(data)
