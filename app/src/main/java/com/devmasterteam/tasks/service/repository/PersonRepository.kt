@@ -19,14 +19,6 @@ class PersonRepository(val context: Context): BaseRepository() {
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
 
         val call = remote.login(email, password)
-        call.enqueue(object : Callback<PersonModel> { //Note: async call!!!
-            override fun onResponse(call: Call<PersonModel>, response: Response<PersonModel>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<PersonModel>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        enqueue(context, call, listener)
     }
 }

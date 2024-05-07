@@ -16,16 +16,24 @@ class TaskRepository(val context: Context) : BaseRepository() {
 
     private val remote = RetrofitClient.getRetrofitService(TaskService::class.java)
 
+    fun list (listener: APIListener<List<TaskModel>>) {
+        val call = remote.list()
+        enqueue(context, call, listener)
+    }
+
+    fun listNext (listener: APIListener<List<TaskModel>>) {
+        val call = remote.listNext7Days()
+        enqueue(context, call, listener)
+    }
+
+    fun listOverdue (listener: APIListener<List<TaskModel>>) {
+        val call = remote.listOverdue()
+        enqueue(context, call, listener)
+    }
+
+
     fun create(task: TaskModel, listener: APIListener<Boolean>) {
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
-        call.enqueue(object: Callback<Boolean> {
-            override fun onResponse(call: Call<Boolean>, response: Response<Boolean>) {
-                handleResponse(response, listener)
-            }
-
-            override fun onFailure(call: Call<Boolean>, t: Throwable) {
-                listener.onFailure(context.getString(R.string.ERROR_UNEXPECTED))
-            }
-        })
+        enqueue(context, call, listener)
     }
 }
