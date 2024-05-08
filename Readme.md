@@ -5,8 +5,9 @@
 _Retrofit  
 _LivaData  
 _SharedPreferences  
-_Room (DB)
-
+_Room (DB)  
+_RecyclerView (Adapter and Holder)  
+_
 
 
 

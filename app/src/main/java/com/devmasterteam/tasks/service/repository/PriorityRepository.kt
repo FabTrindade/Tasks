@@ -29,6 +29,11 @@ class PriorityRepository(val context: Context) : BaseRepository() {
         return database.list()
     }
 
+    fun getDescription (id: Int): String {
+        return database.getDescription(id)
+    }
+
+
     fun save(data: List<PriorityModel>) {
         database.clear()
         database.save(data)
