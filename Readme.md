@@ -7,7 +7,8 @@ _LivaData
 _SharedPreferences  
 _Room (DB)  
 _RecyclerView (Adapter and Holder)  
-_
+_Cache concept for DB calling optimizations  
+
 
 
 
