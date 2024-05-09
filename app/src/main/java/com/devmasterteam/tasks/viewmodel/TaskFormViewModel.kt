@@ -19,7 +19,6 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     var priorityList: LiveData<List<PriorityModel>> = _priorityList
 
 
-
     private var _taskCreate = MutableLiveData<ValidationModel>()
     var taskCreate: LiveData<ValidationModel> = _taskCreate
 
