@@ -36,4 +36,9 @@ class TaskRepository(val context: Context) : BaseRepository() {
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
         enqueue(context, call, listener)
     }
+
+    fun delete (id: Int, listener: APIListener<Boolean>) {
+        val call = remote.delete(id)
+        enqueue(context, call, listener)
+    }
 }

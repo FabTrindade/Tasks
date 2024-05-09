@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -35,6 +36,7 @@ class AllTasksFragment : Fragment() {
             }
 
             override fun onDeleteClick(id: Int) {
+                viewModel.delete(id)
             }
 
             override fun onCompleteClick(id: Int) {
@@ -66,6 +68,12 @@ class AllTasksFragment : Fragment() {
     private fun observe() {
         viewModel.tasks.observe (viewLifecycleOwner) {
             adapter.uptadateTasks(it)
+        }
+
+        viewModel.delete.observe(viewLifecycleOwner) {
+            if (!it.getStatus()) {
+                Toast.makeText(context, it.getMessage(), Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }
