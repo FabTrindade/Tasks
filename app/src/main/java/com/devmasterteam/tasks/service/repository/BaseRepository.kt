@@ -10,7 +10,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-open class BaseRepository {
+open class BaseRepository(val context: Context){
 
     private fun failResponse(str: String): String {
         return Gson().fromJson(str, String::class.java)
@@ -24,7 +24,7 @@ open class BaseRepository {
         }
     }
 
-    fun <T> enqueue (context: Context, call: Call<T>, listener: APIListener<T>) {
+    fun <T> enqueue (call: Call<T>, listener: APIListener<T>) {
         call.enqueue(object: Callback<T> {
             override fun onResponse(
                 call: Call<T>,

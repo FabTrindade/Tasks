@@ -12,13 +12,13 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PersonRepository(val context: Context): BaseRepository() {
+class PersonRepository(context: Context): BaseRepository(context) {
 
     private val remote = RetrofitClient.getRetrofitService(PersonService::class.java)
 
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
 
         val call = remote.login(email, password)
-        enqueue(context, call, listener)
+        enqueue(call, listener)
     }
 }

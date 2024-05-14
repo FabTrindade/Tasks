@@ -12,33 +12,33 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class TaskRepository(val context: Context) : BaseRepository() {
+class TaskRepository(context: Context) : BaseRepository(context) {
 
     private val remote = RetrofitClient.getRetrofitService(TaskService::class.java)
 
     fun list (listener: APIListener<List<TaskModel>>) {
         val call = remote.list()
-        enqueue(context, call, listener)
+        enqueue(call, listener)
     }
 
     fun listNext (listener: APIListener<List<TaskModel>>) {
         val call = remote.listNext7Days()
-        enqueue(context, call, listener)
+        enqueue(call, listener)
     }
 
     fun listOverdue (listener: APIListener<List<TaskModel>>) {
         val call = remote.listOverdue()
-        enqueue(context, call, listener)
+        enqueue(call, listener)
     }
 
 
     fun create(task: TaskModel, listener: APIListener<Boolean>) {
         val call = remote.create(task.priorityId, task.description, task.dueDate, task.complete)
-        enqueue(context, call, listener)
+        enqueue(call, listener)
     }
 
     fun delete (id: Int, listener: APIListener<Boolean>) {
         val call = remote.delete(id)
-        enqueue(context, call, listener)
+        enqueue(call, listener)
     }
 }
