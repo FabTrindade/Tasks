@@ -67,7 +67,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
                 }
 
                 override fun onFailure(message: String) {
-                    TODO("Not yet implemented")
                 }
 
             })

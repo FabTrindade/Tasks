@@ -45,10 +45,32 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onFailure(message: String) {
-
             }
 
         })
     }
 
+    fun complete (id: Int) {
+        taskRepository.complete (id, object : APIListener<Boolean> {
+            override fun onSuccess(response: Boolean) {
+                list()
+            }
+
+            override fun onFailure(message: String) {
+            }
+
+        })
+    }
+
+    fun undo (id: Int) {
+        taskRepository.undo(id, object : APIListener<Boolean> {
+            override fun onSuccess(response: Boolean) {
+                list()
+            }
+
+            override fun onFailure(message: String) {
+            }
+
+        })
+    }
 }
