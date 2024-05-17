@@ -9,9 +9,11 @@ import android.widget.DatePicker
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.devmasterteam.tasks.databinding.ActivityTaskFormBinding
+import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.model.PriorityModel
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.viewmodel.TaskFormViewModel
+import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.Calendar
 
@@ -39,7 +41,16 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
 
         viewModel.loadPriorities()
 
+        laodDataFromActivity()
+
         observe()
+    }
+
+    private fun laodDataFromActivity() {
+        val bundle = intent.extras
+        if (bundle != null) {
+            viewModel.loadTask (bundle.getInt(TaskConstants.BUNDLE.TASKID))
+        }
     }
 
     private fun observe() {
@@ -60,8 +71,23 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
                 finish()
             } else {
                 toast (it.getMessage())
-            }
+            } 
+        }
 
+        viewModel.task.observe(this) {
+            binding.editDescription.setText(it.description)
+            binding.spinnerPriority.setSelection(it.priorityId-1)
+            binding.checkComplete.isChecked = it.complete
+            val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate)
+            binding.buttonDate.text = SimpleDateFormat("dd/MM/yyy").format(date)
+
+        }
+
+        viewModel.taskLoadError.observe(this) {
+            if (!it.getStatus()) {
+                toast(it.getMessage())
+                finish()
+            }
         }
     }
 

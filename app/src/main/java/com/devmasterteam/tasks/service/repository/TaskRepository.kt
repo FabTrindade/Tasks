@@ -50,4 +50,8 @@ class TaskRepository(context: Context) : BaseRepository(context) {
         val call = remote.undo (id)
         enqueue(call, listener)
     }
+
+    fun loadTask(id: Int, listener: APIListener<TaskModel>) {
+        enqueue(remote.listById (id), listener)
+    }
 }

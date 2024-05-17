@@ -22,6 +22,12 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
     private var _taskCreate = MutableLiveData<ValidationModel>()
     var taskCreate: LiveData<ValidationModel> = _taskCreate
 
+    private var _task = MutableLiveData<TaskModel>()
+    var task: LiveData<TaskModel> = _task
+
+    private var _taskLoadError = MutableLiveData<ValidationModel>()
+    var taskLoadError: LiveData<ValidationModel> = _taskLoadError
+
 
     fun loadPriorities() {
         _priorityList.value = priorityRepository.list()
@@ -35,6 +41,19 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
 
             override fun onFailure(message: String) {
                 _taskCreate.value = ValidationModel(message)
+            }
+
+        })
+    }
+
+    fun loadTask(id: Int) {
+        taskRepository.loadTask (id, object: APIListener<TaskModel>{
+            override fun onSuccess(response: TaskModel) {
+                _task.value = response
+            }
+
+            override fun onFailure(message: String) {
+                _taskLoadError.value = ValidationModel(message)
             }
 
         })
