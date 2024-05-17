@@ -5,6 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.devmasterteam.tasks.enums.TaskStatus
 import com.devmasterteam.tasks.service.listener.APIListener
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.model.ValidationModel
@@ -22,6 +23,9 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     private val _delete = MutableLiveData<ValidationModel>()
     val delete: LiveData<ValidationModel> = _delete
 
+    private val _status = MutableLiveData<ValidationModel>()
+    val status: LiveData<ValidationModel> = _status
+
     fun list() {
         taskRepository.list(object : APIListener<List<TaskModel>> {
             override fun onSuccess(response: List<TaskModel>) {
@@ -32,7 +36,6 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onFailure(message: String) {
-                _delete.value = ValidationModel (message)
             }
 
         })
@@ -45,32 +48,26 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
             }
 
             override fun onFailure(message: String) {
+                _delete.value = ValidationModel (message)
             }
+
 
         })
     }
 
-    fun complete (id: Int) {
-        taskRepository.complete (id, object : APIListener<Boolean> {
+    fun setStatus (id: Int, status: TaskStatus) {
+        val listener = object : APIListener<Boolean> {
             override fun onSuccess(response: Boolean) {
                 list()
             }
-
             override fun onFailure(message: String) {
+                _status.value = ValidationModel (message)
             }
+        }
+        when (status) {
+            TaskStatus.COMPLETE -> taskRepository.complete (id, listener)
 
-        })
-    }
-
-    fun undo (id: Int) {
-        taskRepository.undo(id, object : APIListener<Boolean> {
-            override fun onSuccess(response: Boolean) {
-                list()
-            }
-
-            override fun onFailure(message: String) {
-            }
-
-        })
+            TaskStatus.UNDO -> taskRepository.undo (id, listener)
+        }
     }
 }

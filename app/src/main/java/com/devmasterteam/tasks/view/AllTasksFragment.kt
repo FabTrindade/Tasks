@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.devmasterteam.tasks.databinding.FragmentAllTasksBinding
+import com.devmasterteam.tasks.enums.TaskStatus
 import com.devmasterteam.tasks.service.listener.TaskListener
 import com.devmasterteam.tasks.view.adapter.TaskAdapter
 import com.devmasterteam.tasks.viewmodel.TaskListViewModel
@@ -40,13 +41,12 @@ class AllTasksFragment : Fragment() {
             }
 
             override fun onCompleteClick(id: Int) {
-                viewModel.undo(id)
+                viewModel.setStatus(id, TaskStatus.UNDO)
             }
 
             override fun onUndoClick(id: Int) {
-                viewModel.complete(id)
+                viewModel.setStatus(id, TaskStatus.COMPLETE)
             }
-
         }
         adapter.attachListener(listener)
 
@@ -73,6 +73,12 @@ class AllTasksFragment : Fragment() {
         }
 
         viewModel.delete.observe(viewLifecycleOwner) {
+            if (!it.getStatus()) {
+                Toast.makeText(context, it.getMessage(), Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        viewModel.status.observe(viewLifecycleOwner) {
             if (!it.getStatus()) {
                 Toast.makeText(context, it.getMessage(), Toast.LENGTH_SHORT).show()
             }
