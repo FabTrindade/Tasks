@@ -54,4 +54,14 @@ class TaskRepository(context: Context) : BaseRepository(context) {
     fun loadTask(id: Int, listener: APIListener<TaskModel>) {
         enqueue(remote.listById (id), listener)
     }
+
+    fun update(task: TaskModel, listener: APIListener<Boolean>) {
+        val call = remote.update (
+            task.id,
+            task.priorityId,
+            task.description,
+            task.dueDate,
+            task.complete)
+        enqueue(call, listener)
+    }
 }

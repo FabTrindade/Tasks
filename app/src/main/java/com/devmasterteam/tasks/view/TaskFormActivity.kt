@@ -20,6 +20,7 @@ import java.util.Calendar
 class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     DatePickerDialog.OnDateSetListener {
 
+    private var taskIdentification: Int = 0
     private lateinit var viewModel: TaskFormViewModel
     private lateinit var binding: ActivityTaskFormBinding
 
@@ -49,7 +50,8 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     private fun laodDataFromActivity() {
         val bundle = intent.extras
         if (bundle != null) {
-            viewModel.loadTask (bundle.getInt(TaskConstants.BUNDLE.TASKID))
+            taskIdentification = bundle.getInt(TaskConstants.BUNDLE.TASKID)
+            viewModel.loadTask (taskIdentification)
         }
     }
 
@@ -71,7 +73,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
                 finish()
             } else {
                 toast (it.getMessage())
-            } 
+            }
         }
 
         viewModel.task.observe(this) {
@@ -80,6 +82,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             binding.checkComplete.isChecked = it.complete
             val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate)
             binding.buttonDate.text = SimpleDateFormat("dd/MM/yyy").format(date)
+            binding.buttonSave.setText("SALVAR TAREFA")
 
         }
 
@@ -112,7 +115,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
     }
     private fun handleSave() {
         val task = TaskModel().apply {
-            this.id= 0
+            this.id= taskIdentification
             this.description = binding.editDescription.text.toString()
             this.complete = binding.checkComplete.isChecked
             this.dueDate = binding.buttonDate.text.toString()
@@ -121,7 +124,11 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             this.priorityId = listPriority[index].id
         }
 
-        viewModel.save(task)
+        if (taskIdentification != 0) {
+            viewModel.update(task)
+        } else {
+            viewModel.save(task)
+        }
     }
     private fun handleDate() {
         val calendar = Calendar.getInstance()

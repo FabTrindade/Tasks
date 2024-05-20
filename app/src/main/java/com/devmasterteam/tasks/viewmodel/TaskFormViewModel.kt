@@ -58,4 +58,15 @@ class TaskFormViewModel(application: Application) : AndroidViewModel(application
 
         })
     }
+
+    fun update(task: TaskModel) {
+        taskRepository.update(task, object: APIListener<Boolean>{
+            override fun onSuccess(response: Boolean) {
+            }
+
+            override fun onFailure(message: String) {
+            }
+
+        })
+    }
 }
