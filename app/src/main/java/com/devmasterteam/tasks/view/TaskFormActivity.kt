@@ -51,7 +51,7 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         val bundle = intent.extras
         if (bundle != null) {
             taskIdentification = bundle.getInt(TaskConstants.BUNDLE.TASKID)
-            viewModel.loadTask (taskIdentification)
+            viewModel.loadTask(taskIdentification)
         }
     }
 
@@ -67,18 +67,22 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             binding.spinnerPriority.adapter = adapter
         }
 
-        viewModel.taskCreate.observe(this) {
+        viewModel.taskSave.observe(this) {
             if (it.getStatus()) {
-                toast ("Success!")
+                if (taskIdentification == 0) {
+                    toast("Task created successfully !")
+                } else {
+                    toast("Task updated successfully !")
+                }
                 finish()
             } else {
-                toast (it.getMessage())
+                toast(it.getMessage())
             }
         }
 
         viewModel.task.observe(this) {
             binding.editDescription.setText(it.description)
-            binding.spinnerPriority.setSelection(it.priorityId-1)
+            binding.spinnerPriority.setSelection(it.priorityId - 1)
             binding.checkComplete.isChecked = it.complete
             val date = SimpleDateFormat("yyyy-MM-dd").parse(it.dueDate)
             binding.buttonDate.text = SimpleDateFormat("dd/MM/yyy").format(date)
@@ -113,9 +117,10 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
         calendar.set(year, month, dayOfMonth)
         binding.buttonDate.text = SimpleDateFormat("dd/MM/yyyy").format(calendar.time)
     }
+
     private fun handleSave() {
         val task = TaskModel().apply {
-            this.id= taskIdentification
+            this.id = taskIdentification
             this.description = binding.editDescription.text.toString()
             this.complete = binding.checkComplete.isChecked
             this.dueDate = binding.buttonDate.text.toString()
@@ -124,12 +129,10 @@ class TaskFormActivity : AppCompatActivity(), View.OnClickListener,
             this.priorityId = listPriority[index].id
         }
 
-        if (taskIdentification != 0) {
-            viewModel.update(task)
-        } else {
-            viewModel.save(task)
-        }
+        viewModel.save(task)
+
     }
+
     private fun handleDate() {
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
