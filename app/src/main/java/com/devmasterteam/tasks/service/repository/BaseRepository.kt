@@ -44,15 +44,30 @@ open class BaseRepository(val context: Context) {
         })
     }
 
-   fun isConnectionAvaleible(): Boolean {
+    fun isConnectionAvaleible(): Boolean {
+        var result = false
         val cm = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        val activeNet = cm.activeNetwork ?: return false
-        val networkCapabilities = cm.getNetworkCapabilities(activeNet) ?: return false
 
-        return when {
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-            networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-            else -> false
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // M = API 23
+            val activeNet = cm.activeNetwork ?: return false
+            val networkCapabilities = cm.getNetworkCapabilities(activeNet) ?: return false
+
+            result = when {
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
+                networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
+                else -> false
+            }
+        } else {
+                if (cm.activeNetworkInfo != null){
+                result = when (cm.activeNetworkInfo!!.type) {
+                    ConnectivityManager.TYPE_WIFI -> true
+                    ConnectivityManager.TYPE_ETHERNET -> true
+                    ConnectivityManager.TYPE_MOBILE -> true
+                    else -> false
+                }
+            }
         }
+
+        return result
     }
 }
