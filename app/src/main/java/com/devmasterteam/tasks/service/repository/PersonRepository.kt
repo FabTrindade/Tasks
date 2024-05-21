@@ -17,6 +17,10 @@ class PersonRepository(context: Context): BaseRepository(context) {
     private val remote = RetrofitClient.getRetrofitService(PersonService::class.java)
 
     fun login(email: String, password: String, listener: APIListener<PersonModel>) {
+        if(!isConnectionAvaleible()){
+            listener.onFailure(context.getString(R.string.ERROR_INTERNET_CONNECTION))
+            return
+        }
 
         val call = remote.login(email, password)
         enqueue(call, listener)
