@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.devmasterteam.tasks.enums.TaskStatus
+import com.devmasterteam.tasks.service.constants.TaskConstants
 import com.devmasterteam.tasks.service.listener.APIListener
 import com.devmasterteam.tasks.service.model.TaskModel
 import com.devmasterteam.tasks.service.model.ValidationModel
@@ -26,8 +27,11 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     private val _status = MutableLiveData<ValidationModel>()
     val status: LiveData<ValidationModel> = _status
 
-    fun list() {
-        taskRepository.list(object : APIListener<List<TaskModel>> {
+    private var taskFilter: Int = 0
+
+    fun list(filter: Int) {
+        taskFilter = filter
+        val listener = object : APIListener<List<TaskModel>> {
             override fun onSuccess(response: List<TaskModel>) {
                 response.forEach {
                     it.priorityDescription = priorityRepository.getDescription(it.priorityId)
@@ -38,13 +42,19 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
             override fun onFailure(message: String) {
             }
 
-        })
+        }
+
+        when (filter) {
+            TaskConstants.FILTER.ALL -> taskRepository.list(listener)
+            TaskConstants.FILTER.NEXT -> taskRepository.listNext(listener)
+            TaskConstants.FILTER.EXPIRED -> taskRepository.listOverdue(listener)
+        }
     }
 
     fun delete(id: Int) {
         taskRepository.delete(id, object : APIListener<Boolean> {
             override fun onSuccess(response: Boolean) {
-                list()
+                list(taskFilter)
             }
 
             override fun onFailure(message: String) {
@@ -58,7 +68,7 @@ class TaskListViewModel(application: Application) : AndroidViewModel(application
     fun setStatus (id: Int, status: TaskStatus) {
         val listener = object : APIListener<Boolean> {
             override fun onSuccess(response: Boolean) {
-                list()
+                list(taskFilter)
             }
             override fun onFailure(message: String) {
                 _status.value = ValidationModel (message)
