@@ -37,9 +37,15 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
     }
 
     override fun onClick(v: View) {
-        if (v.id == binding.buttonLogin.id) {
-            handleLogin()
+        when (v.id) {
+            binding.buttonLogin.id -> handleLogin()
+
+            binding.textRegister.id -> {
+                startActivity(Intent(applicationContext, RegisterActivity::class.java))
+            }
         }
+
+
     }
 
     private fun observe() {
@@ -66,4 +72,5 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
         viewModel.doLogin(email, password)
     }
+
 }
