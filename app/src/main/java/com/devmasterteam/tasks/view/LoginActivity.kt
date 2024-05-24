@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             binding.buttonLogin.id -> handleLogin()
 
             binding.textRegister.id -> {
-                startActivity(Intent(applicationContext, RegisterActivity::class.java))
+                startActivity(Intent(this, RegisterActivity::class.java))
             }
         }
 
