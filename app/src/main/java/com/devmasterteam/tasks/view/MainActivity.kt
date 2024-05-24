@@ -2,6 +2,7 @@ package com.devmasterteam.tasks.view
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.TextView
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -42,8 +43,18 @@ class MainActivity : AppCompatActivity() {
         // Navegação
         setupNavigation()
 
+        //Carrega nome usuario
+        laodUserName()
+
         // Observadores
         observe()
+    }
+
+    private fun laodUserName() {
+        val name = viewModel.getUserName()
+
+        val header = binding.navView.getHeaderView(0)
+        header.findViewById<TextView>(R.id.text_name).text = name
     }
 
     override fun onResume() {

@@ -14,4 +14,8 @@ class MainViewModel(application: Application) : AndroidViewModel (application) {
         securityPreferences.remove(TaskConstants.SHARED.TOKEN_KEY)
     }
 
+    fun getUserName(): String {
+        return securityPreferences.get(TaskConstants.SHARED.PERSON_NAME)
+    }
+
 }
