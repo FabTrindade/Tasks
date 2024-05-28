@@ -31,4 +31,12 @@
         <item name="android:paddingTop">8dp</item>
         <item name="android:paddingBottom">8dp</item>
     </style>
+
+    <style name="LogingEditText">
+        <item name="android:drawableTint">@color/purple_500</item>
+        <item name="android:drawablePadding">8dp</item>
+        <item name="android:textColor">@color/purple_500</item>
+        <item name="android:textColorHint">@color/purple_500</item>
+        <item name="android:backgroundTint">@color/purple_500</item>
+    </style>
 </resources>
