@@ -38,7 +38,8 @@
         android:text="@string/entrar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/edit_password" />
+        app:layout_constraintTop_toBottomOf="@id/edit_password"
+        style="@style/DefaultButton" />
 
     <TextView
         android:id="@+id/text_new_account"
