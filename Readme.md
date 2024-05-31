@@ -10,10 +10,4 @@ _RecyclerView (Adapter and Holder)
 _Cache concept for DB calling optimizations  
 _Android SDK compatibility checks  
 _NavigationBar features  
-
-
-
-
-
-
-
+_BiometricManager, BiometricPrompt (for fingerprint authentication)  

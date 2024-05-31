@@ -14,6 +14,7 @@ import com.devmasterteam.tasks.service.repository.PersonRepository
 import com.devmasterteam.tasks.service.repository.PriorityRepository
 import com.devmasterteam.tasks.service.repository.SecurityPreferences
 import com.devmasterteam.tasks.service.repository.remote.RetrofitClient
+import com.iteris.poc_fingerprint.BiometricHelper
 
 class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -50,15 +51,13 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
     /**
      * Verifica se usuário está logado
      */
-    fun verifyLoggedUser() {
+    fun verifyAuthentication() {
 
         val token = securityPreferences.get(TaskConstants.SHARED.TOKEN_KEY)
         val personKey = securityPreferences.get(TaskConstants.SHARED.PERSON_KEY)
         val logged = ((token != "") && (personKey != ""))
 
         RetrofitClient.addHeaders(token, personKey)
-
-        _loggedUser.value = logged
 
         if (!logged) {
             priorityRepository.list(object: APIListener<List<PriorityModel>>{
@@ -71,6 +70,6 @@ class LoginViewModel(application: Application) : AndroidViewModel(application) {
 
             })
         }
-
+        _loggedUser.value = (logged && BiometricHelper.isBiometricAvaleible(getApplication()))
     }
 }
